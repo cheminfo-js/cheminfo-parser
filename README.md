@@ -10,7 +10,7 @@ Allows to parse a google spreadsheet written in a specific format
 ## Installation
 
 ```
-$ npm install Cheminfo google spreadsheet parser
+$ npm install cheminfo-parser
 ```
 
 ## License

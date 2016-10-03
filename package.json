@@ -1,5 +1,5 @@
 {
-  "name": "Cheminfo google spreadsheet parser",
+  "name": "cheminfo-parser",
   "version": "0.0.1",
   "description": "Allows to parse a google spreadsheet written in a specific format",
   "keywords": [],
