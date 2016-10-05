@@ -25,25 +25,44 @@ module.exports = function parse (text, options = {}) {
     }
     result.recordInfo=recordInfo;
 
-
-    for (var line of lines) {
+    var columnInfo={};
+    result.columnInfo=columnInfo;
+    for (var fields of lines) {
         var kind=fields[0];
-        if (recordInfo[info].data) { // a record
-            result.data[kind].push(convertLine(line, result.info));
-        } else { // extra information about a column
-
+        if (recordInfo[kind].data) { // a record
+            result.data[kind].push(convertLine(fields, result.labels, autotype));
+        } else if (kind==='label') { // extra information about a column
+            result.labels=fields;
+        } else { // some extra information about the column
+            for (var i=1; i<result.labels.length; i++) {
+                var label=result.labels[i];
+                if (label) {
+                    if (! columnInfo[label]) columnInfo[label]={};
+                    if (fields[i]) {
+                        columnInfo[label][fields[0]] = fields[i];
+                    }
+                }
+            }
         }
     }
 
+    result.labels=result.labels.filter(label => label)
     return result;
 };
 
-function convertLine(line, info) {
+function convertLine(fields, labels, autotype) {
     var result={};
-    for (var i=1; i<line.length; i++) {
-        var value=line[i];
-        result[info.label[i]]=value;
+    for (var i=1; i<fields.length; i++) {
+        if (labels[i]) {
+            if (autotype && ! isNaN(fields[i])) {
+                result[labels[i]]=parseFloat(fields[i]);
+            } else {
+                result[labels[i]]=fields[i];
+            }
+
+        }
     }
+    return result;
 }
 
 
